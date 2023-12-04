@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define BOARD_SIZE 10
+#define SHIPS 5
+
+typedef struct {
+    int row;
+    int col;
+} Coordinate;
+
+typedef struct {
+    Coordinate start;
+    Coordinate end;
+} Ship;
+
+typedef struct {
+    Ship ships[SHIPS];
+    char board[BOARD_SIZE][BOARD_SIZE];
+} Game;
+
+void initializeBoard(Game *game) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            game->board[i][j] = ' ';
+        }
+    }
+}
+
+void placeShips(Game *game) {
+    srand(time(NULL));
+
+    for (int i = 0; i < SHIPS; i++) {
+        Ship newShip;
+        newShip.start.row = rand() % BOARD_SIZE;
+        newShip.start.col = rand() % BOARD_SIZE;
+        newShip.end.row = newShip.start.row + rand() % 5;
+        newShip.end.col = newShip.start.col + rand() % 5;
+
+        game->ships[i] = newShip;
+    }
+}
+
+void printBoard(const Game *game) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            printf("%c ", game->board[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    Game game;
+    initializeBoard(&game);
+    placeShips(&game);
+    printBoard(&game);
+
+    return 0;
+}
